@@ -36,7 +36,7 @@
     constraints))
 
 (defn all-coordinates [constraints]
-  (distinct (apply concat (keys constraints))))
+  (reduce clojure.set/union (keys constraints)))
 
 (defn solution-description [all-coordinates coordinate-value-list]
    (into {}  (zip-with all-coordinates coordinate-value-list)))
