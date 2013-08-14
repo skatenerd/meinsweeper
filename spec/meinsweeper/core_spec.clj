@@ -7,8 +7,11 @@
   (it
     "finds values for coordinates fixed by constraints"
     (let [constraints {#{[0 0] [0 1]} 1
-                       #{[0 0] [0 1] [0 2]} 2}]
-      (should= {[0 2] 1} (fixed-coordinate-values constraints))
+                       #{[0 0] [0 1] [0 2]} 2}
+          constraints-set #{
+                            (new-constraint #{[0 0] [0 1]} 1)
+                            (new-constraint #{[0 0] [0 1] [0 2]} 2)}]
+      (should= {[0 2] 1} (fixed-coordinate-values constraints-set))
       ))
   )
 

@@ -7,6 +7,9 @@
 (def unknown :unknown)
 (def mine :mine)
 
+(defrecord Constraint [squares total-mines])
+(defn new-constraint [squares total-mines] (Constraint. squares total-mines))
+
 (defn bind-to-zero-or-one [lvars]
   (lg/everyg #(fd/in % (fd/interval 0 1)) lvars))
 
@@ -26,17 +29,17 @@
 
 (defn lvar-list-to-sum [constraints]
   (reduce
-    (fn [bucket [coordinates-list sum]]
+    (fn [bucket constraint]
       (assoc
         bucket
-        (map #(lvar-for-coordinate %) coordinates-list)
-        sum
+        (map #(lvar-for-coordinate %) (:squares constraint))
+        (:total-mines constraint)
         ))
     {}
     constraints))
 
 (defn all-coordinates [constraints]
-  (reduce clojure.set/union (keys constraints)))
+  (reduce clojure.set/union (map :squares constraints)))
 
 (defn solution-description [all-coordinates coordinate-value-list]
    (into {}  (zip-with all-coordinates coordinate-value-list)))
