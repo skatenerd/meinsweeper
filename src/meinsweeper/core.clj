@@ -7,8 +7,14 @@
 (def unknown :unknown)
 (def mine :mine)
 
+(def lvar-for-coordinate
+  (memoize #(lg/lvar %)))
+
 (defrecord Constraint [squares total-mines])
 (defn new-constraint [squares total-mines] (Constraint. squares total-mines))
+
+(defn constraint-lvars [constraint]
+  (map lvar-for-coordinate (:squares constraint)))
 
 (defn bind-to-zero-or-one [lvars]
   (lg/everyg #(fd/in % (fd/interval 0 1)) lvars))
@@ -21,22 +27,8 @@
        (is-sum tail tail-sum)
        (fd/+ tail-sum head num))]))
 
-(def lvar-for-coordinate
-  (memoize #(lg/lvar %)))
-
 (defn zip-with [first second]
   (map vector first second))
-
-(defn lvar-list-to-sum [constraints]
-  (reduce
-    (fn [bucket constraint]
-      (assoc
-        bucket
-        (map #(lvar-for-coordinate %) (:squares constraint))
-        (:total-mines constraint)
-        ))
-    {}
-    constraints))
 
 (defn all-coordinates [constraints]
   (reduce clojure.set/union (map :squares constraints)))
@@ -48,11 +40,10 @@
   (map lvar-for-coordinate (all-coordinates constraints)))
 
 (defn value-lists [constraints]
-  (let [sums-for-lvars (lvar-list-to-sum constraints)
-        all-lvars (lvars-for-constraints constraints)]
+  (let [all-lvars (lvars-for-constraints constraints)]
     (lg/run* [q]
            (bind-to-zero-or-one all-lvars)
-           (lg/everyg #(is-sum % (sums-for-lvars %)) (keys sums-for-lvars))
+           (lg/everyg #(is-sum (constraint-lvars %) (:total-mines %)) constraints)
            (lg/== q all-lvars))))
 
 (defn solve-constraints [constraints]
