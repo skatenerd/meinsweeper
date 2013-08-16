@@ -19,7 +19,7 @@
 (describe
   "integration"
   (before
-    (remove-facts neighbor-mine-count 2))
+    (remove-facts numbered-square 2))
 
   (it
     "finds values for coordinates fixed by constraints"
@@ -29,8 +29,8 @@
       (should= {[0 2] 1} (fixed-coordinate-values constraints-set))))
 
   (it "gets constraints from board dimensions + existing facts"
-      (lg/fact neighbor-mine-count [0 0] 2)
-      (lg/fact neighbor-mine-count [0 1] 3)
+      (lg/fact numbered-square [0 0] 2)
+      (lg/fact numbered-square [0 1] 3)
 
       (should= #{
                  (new-constraint #{[0 0]} 0)

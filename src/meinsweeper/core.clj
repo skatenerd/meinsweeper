@@ -64,7 +64,7 @@
 
 
 ;;;Producing constraints
-(lg/defrel neighbor-mine-count square count)
+(lg/defrel numbered-square square count)
 
 
 
@@ -84,7 +84,7 @@
 
 (defn constraints [rows cols]
   (let [mine-count-facts (lg/run* [square count]
-                               (neighbor-mine-count square count))]
+                               (numbered-square square count))]
     (set (flatten (map #(constraints-for-fact rows cols %) mine-count-facts)))))
 
 
