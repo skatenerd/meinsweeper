@@ -38,5 +38,25 @@
                  (new-constraint #{[0 0] [0 1] [1 0] [1 1]}  2)
                  (new-constraint #{[0 0] [0 1] [0 2] [1 0] [1 1] [1 2]} 3)}
                (constraints 2 3)))
+
+  (it "solves 1-2-2-1 case, starting with facts"
+      (lg/fact numbered-square [0 0] 1)
+      (lg/fact numbered-square [0 1] 2)
+      (lg/fact numbered-square [0 2] 2)
+      (lg/fact numbered-square [0 3] 1)
+
+      (should= {
+                [0 0] 0;kill these
+                [0 1] 0
+                [0 2] 0
+                [0 3] 0
+                [1 0] 0;till here...
+                [1 1] 1
+                [1 2] 1
+                [1 3] 0}
+               (facts-to-fixed-points 2 4)))
+
+
+
   )
 

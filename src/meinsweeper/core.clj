@@ -1,6 +1,7 @@
 (ns meinsweeper.core
   (:require [clojure.core.logic :as lg]
             [clojure.core.logic.fd :as fd]))
+
 ;;;Solving, given constraints
 (declare same-at)
 
@@ -86,6 +87,14 @@
   (let [mine-count-facts (lg/run* [square count]
                                (numbered-square square count))]
     (set (flatten (map #(constraints-for-fact rows cols %) mine-count-facts)))))
+
+
+;;;;;;;;winning
+(defn facts-to-fixed-points [rows cols]
+  (let [constraints (constraints rows cols)
+
+        ]
+    (fixed-coordinate-values constraints)))
 
 
 
