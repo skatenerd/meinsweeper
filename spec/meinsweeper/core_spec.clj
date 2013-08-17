@@ -53,11 +53,11 @@
       (lg/fact numbered-square [0 3] 1)
 
       (should= {
-                [0 0] 0;kill these
+                [0 0] 0
                 [0 1] 0
                 [0 2] 0
                 [0 3] 0
-                [1 0] 0;till here...
+                [1 0] 0
                 [1 1] 1
                 [1 2] 1
                 [1 3] 0}
@@ -65,11 +65,11 @@
 
   (it "finds fixed points from 1-2-2-1 array input"
       (should= {
-                [0 0] 0;kill these
+                [0 0] 0
                 [0 1] 0
                 [0 2] 0
                 [0 3] 0
-                [1 0] 0;till here...
+                [1 0] 0
                 [1 1] 1
                 [1 2] 1
                 [1 3] 0}
@@ -90,6 +90,14 @@
                  }
                 (grid-to-fixed-points [[unknown 1    unknown]
                                        [unknown mine unknown]])))
+
+  (it "tells you what clicks to make"
+      (should= {[1 0] vacant
+                [1 1] mine
+                [1 2] mine
+                [1 3] vacant}
+               (clicks-for [[1       2       2       1]
+                            [unknown unknown unknown unknown]])))
 
 
   )

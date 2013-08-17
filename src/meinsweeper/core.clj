@@ -117,6 +117,7 @@
 
 (def unknown :unknown)
 (def mine :mine)
+(def vacant :vacant)
 
 (defn mine? [square]
   (= mine square))
@@ -127,13 +128,29 @@
         (mine? square)
         (lg/fact mine-square [row-idx col-idx] true)))
 
+(defn square-at [grid [row-idx col-idx]]
+  ((grid row-idx) col-idx) )
+
 (defn generate-facts-for [grid]
   (doall (for [row-idx (range (rows-count grid))
                col-idx (range (cols-count grid))]
-           (let [square ((grid row-idx) col-idx)]
+           (let [square (square-at grid [row-idx col-idx])]
              (generate-fact-for square row-idx col-idx)))))
 
 (defn grid-to-fixed-points [grid]
   (generate-facts-for grid)
   (facts-to-fixed-points (rows-count grid) (cols-count grid)))
 
+(defn relevant-points [fixed-points grid]
+  (filter
+    #(= unknown (square-at grid (key %)))
+    fixed-points))
+
+(defn click-representation [fixed-point]
+  [(key fixed-point) ({1 mine 0 vacant} (val fixed-point))])
+
+(defn fixed-points-to-clicks [fixed-points grid]
+  (into {} (map click-representation (relevant-points fixed-points grid))))
+
+(defn clicks-for [grid]
+  (fixed-points-to-clicks (grid-to-fixed-points grid) grid))
