@@ -1,4 +1,4 @@
-(ns meinsweeper.core
+(ns meinsweeper.ai
   (:require [clojure.core.logic :as lg]
             [clojure.core.logic.fd :as fd]))
 ;;;bs

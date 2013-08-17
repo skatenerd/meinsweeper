@@ -1,7 +1,7 @@
-(ns meinsweeper.core-spec
+(ns meinsweeper.ai-spec
   (:require [speclj.core :refer :all]
             [clojure.core.logic :as lg]
-            [meinsweeper.core :refer :all]))
+            [meinsweeper.ai :refer :all]))
 
 (defn remove-facts [relation]
   (let [facts (lg/run* [a b]
@@ -98,7 +98,6 @@
                 [1 3] vacant}
                (clicks-for [[1       2       2       1]
                             [unknown unknown unknown unknown]])))
-
 
   )
 
