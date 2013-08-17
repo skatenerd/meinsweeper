@@ -19,7 +19,8 @@
 (describe
   "integration"
   (before
-    (remove-facts numbered-square 2))
+    (remove-facts numbered-square 2)
+    (remove-facts mine-square 2))
 
   (it
     "finds values for coordinates fixed by constraints"
@@ -38,6 +39,12 @@
                  (new-constraint #{[0 0] [0 1] [1 0] [1 1]}  2)
                  (new-constraint #{[0 0] [0 1] [0 2] [1 0] [1 1] [1 2]} 3)}
                (constraints 2 3)))
+
+  (it "generates constraints from mines"
+      (lg/fact mine-square [0 1] true)
+      (should= #{(new-constraint #{[0 1]} 1)}
+               (constraints 2 3))
+      )
 
   (it "solves 1-2-2-1 case, starting with facts"
       (lg/fact numbered-square [0 0] 1)
@@ -67,13 +74,22 @@
                 [1 2] 1
                 [1 3] 0}
                (grid-to-fixed-points [[1       2       2       1]
-                                      [:vacant :vacant :vacant :vacant]])
+                                      [unknown unknown unknown unknown]])
 
 
                ))
 
-
-
+  (it "learns from mines on board"
+       (should= {
+                 [0 0] 0;kill these
+                 [0 1] 0
+                 [0 2] 0
+                 [1 0] 0;till here...
+                 [1 1] 1
+                 [1 2] 0
+                 }
+                (grid-to-fixed-points [[unknown 1    unknown]
+                                       [unknown mine unknown]])))
 
 
   )

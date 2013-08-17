@@ -72,7 +72,8 @@
 
 
 ;;;Producing constraints
-(lg/defrel numbered-square square count)
+(lg/defrel numbered-square coordinates count)
+(lg/defrel mine-square coordinates ignoreme)
 
 
 
@@ -90,10 +91,23 @@
     [(new-constraint (set neighbors) count)
      (new-constraint (set [square]) 0)]))
 
-(defn constraints [rows cols]
+(defn numbered-square-constraints [rows cols]
   (let [mine-count-facts (lg/run* [square count]
                                (numbered-square square count))]
     (set (flatten (map #(constraints-for-fact rows cols %) mine-count-facts)))))
+
+(defn mine-square-constraints []
+  (let [mine-square-facts (lg/run* [square ignoreme]
+                               (mine-square square ignoreme))]
+    (set
+      (for [[square _] mine-square-facts]
+        (new-constraint (set [square]) 1)))))
+
+(defn constraints [rows cols]
+  (clojure.set/union
+    (numbered-square-constraints rows cols)
+    (mine-square-constraints)
+    ))
 
 
 ;;;;;;;;winning
@@ -101,11 +115,17 @@
   (let [constraints (constraints rows cols)]
     (fixed-coordinate-values constraints)))
 
-(def vacant :vacant)
+(def unknown :unknown)
+(def mine :mine)
+
+(defn mine? [square]
+  (= mine square))
 
 (defn generate-fact-for [square row-idx col-idx]
   (cond (number? square)
-        (lg/fact numbered-square [row-idx col-idx] square)))
+        (lg/fact numbered-square [row-idx col-idx] square)
+        (mine? square)
+        (lg/fact mine-square [row-idx col-idx] true)))
 
 (defn generate-facts-for [grid]
   (doall (for [row-idx (range (rows-count grid))
@@ -116,6 +136,4 @@
 (defn grid-to-fixed-points [grid]
   (generate-facts-for grid)
   (facts-to-fixed-points (rows-count grid) (cols-count grid)))
-
-
 
