@@ -1,6 +1,13 @@
 (ns meinsweeper.core
   (:require [clojure.core.logic :as lg]
             [clojure.core.logic.fd :as fd]))
+;;;bs
+
+(defn rows-count [grid]
+  (count grid))
+
+(defn cols-count [grid]
+  (count (first grid)))
 
 ;;;Solving, given constraints
 (declare same-at)
@@ -91,10 +98,24 @@
 
 ;;;;;;;;winning
 (defn facts-to-fixed-points [rows cols]
-  (let [constraints (constraints rows cols)
-
-        ]
+  (let [constraints (constraints rows cols)]
     (fixed-coordinate-values constraints)))
+
+(def vacant :vacant)
+
+(defn generate-fact-for [square row-idx col-idx]
+  (cond (number? square)
+        (lg/fact numbered-square [row-idx col-idx] square)))
+
+(defn generate-facts-for [grid]
+  (doall (for [row-idx (range (rows-count grid))
+               col-idx (range (cols-count grid))]
+           (let [square ((grid row-idx) col-idx)]
+             (generate-fact-for square row-idx col-idx)))))
+
+(defn grid-to-fixed-points [grid]
+  (generate-facts-for grid)
+  (facts-to-fixed-points (rows-count grid) (cols-count grid)))
 
 
 

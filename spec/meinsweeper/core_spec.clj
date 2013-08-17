@@ -56,6 +56,24 @@
                 [1 3] 0}
                (facts-to-fixed-points 2 4)))
 
+  (it "finds fixed points from 1-2-2-1 array input"
+      (should= {
+                [0 0] 0;kill these
+                [0 1] 0
+                [0 2] 0
+                [0 3] 0
+                [1 0] 0;till here...
+                [1 1] 1
+                [1 2] 1
+                [1 3] 0}
+               (grid-to-fixed-points [[1       2       2       1]
+                                      [:vacant :vacant :vacant :vacant]])
+
+
+               ))
+
+
+
 
 
   )
