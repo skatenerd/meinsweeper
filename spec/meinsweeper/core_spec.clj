@@ -81,10 +81,10 @@
 
   (it "learns from mines on board"
        (should= {
-                 [0 0] 0;kill these
+                 [0 0] 0
                  [0 1] 0
                  [0 2] 0
-                 [1 0] 0;till here...
+                 [1 0] 0
                  [1 1] 1
                  [1 2] 0
                  }
