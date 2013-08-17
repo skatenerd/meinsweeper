@@ -1,6 +1,8 @@
 (ns meinsweeper.ai
   (:require [clojure.core.logic :as lg]
-            [clojure.core.logic.fd :as fd]))
+            [clojure.core.logic.fd :as fd]
+            [meinsweeper.square-names :refer :all]
+            ))
 ;;;bs
 
 (defn rows-count [grid]
@@ -114,10 +116,6 @@
 (defn facts-to-fixed-points [rows cols]
   (let [constraints (constraints rows cols)]
     (fixed-coordinate-values constraints)))
-
-(def unknown :unknown)
-(def mine :mine)
-(def vacant :vacant)
 
 (defn mine? [square]
   (= mine square))

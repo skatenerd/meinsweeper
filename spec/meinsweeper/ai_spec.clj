@@ -1,6 +1,7 @@
 (ns meinsweeper.ai-spec
   (:require [speclj.core :refer :all]
             [clojure.core.logic :as lg]
+            [meinsweeper.square-names :refer :all]
             [meinsweeper.ai :refer :all]))
 
 (defn remove-facts [relation]
