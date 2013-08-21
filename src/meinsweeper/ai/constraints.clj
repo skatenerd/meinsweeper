@@ -1,4 +1,4 @@
-(ns meinsweeper.ai.constraint
+(ns meinsweeper.ai.constraints
   (:require [clojure.core.logic :as lg]
             [meinsweeper.ai.facts :as facts]
             [meinsweeper.ai.grid :as grid]))
@@ -9,7 +9,7 @@
 
 (defn new-constraint [squares total-mines] (Constraint. squares total-mines))
 
-(defn constraints [rows cols]
+(defn from-facts [rows cols]
   (clojure.set/union
     (numbered-square-constraints rows cols)
     (mine-square-constraints)))

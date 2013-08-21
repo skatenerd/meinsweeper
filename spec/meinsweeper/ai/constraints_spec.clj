@@ -1,6 +1,6 @@
-(ns meinsweeper.ai.constraint-spec
+(ns meinsweeper.ai.constraints-spec
   (:require [speclj.core :refer :all]
-            [meinsweeper.ai.constraint :refer :all]
+            [meinsweeper.ai.constraints :refer :all]
             [meinsweeper.spec-helper :refer :all]
             [meinsweeper.ai.facts :refer :all]
             ))
@@ -19,12 +19,12 @@
                  (new-constraint #{[0 1]} 0)
                  (new-constraint #{[0 0] [0 1] [1 0] [1 1]}  2)
                  (new-constraint #{[0 0] [0 1] [0 2] [1 0] [1 1] [1 2]} 3)}
-               (constraints 2 3)))
+               (from-facts 2 3)))
 
 
   (it "generates constraints from mines"
       (record-mine-square [0 1])
       (should= #{(new-constraint #{[0 1]} 1)}
-               (constraints 2 3))
+               (from-facts 2 3))
       )
   )

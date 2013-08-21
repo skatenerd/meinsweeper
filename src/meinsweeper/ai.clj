@@ -1,23 +1,19 @@
 (ns meinsweeper.ai
-  (:require [clojure.core.logic :as lg]
-            [clojure.core.logic.fd :as fd]
-            [meinsweeper.square-names :refer :all]
-            [meinsweeper.ai.facts :refer :all]
-            [meinsweeper.ai.constraint :refer :all]
-            [meinsweeper.ai.constraint-resolution :refer :all]
+  (:require [meinsweeper.ai.facts :as facts]
+            [meinsweeper.ai.constraints :as constraints]
+            [meinsweeper.ai.constraint-resolution :as resolutions]
             [meinsweeper.ai.grid :refer :all]
-            [meinsweeper.ai.clicks :as clicks]
-            ))
+            [meinsweeper.ai.clicks :as clicks]))
 
 
-(defn facts-to-fixed-squares [rows cols]
-  (let [constraints (constraints rows cols)]
-    (fixed-coordinate-values constraints)))
+(defn fixed-squares [rows cols]
+  (let [constraints (constraints/from-facts rows cols)]
+    (resolutions/for-constraints constraints)))
 
-(defn grid-to-fixed-squares [grid]
-  (generate-facts-for grid)
-  (facts-to-fixed-squares (rows-count grid) (cols-count grid)))
+(defn fixed-squares-for-grid [grid]
+  (facts/generate-facts-for grid)
+  (fixed-squares (rows-count grid) (cols-count grid)))
 
 (defn clicks-for [grid]
-  (clicks/fixed-squares-to-clicks (grid-to-fixed-squares grid) grid))
+  (clicks/for (fixed-squares-for-grid grid) grid))
 

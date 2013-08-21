@@ -3,7 +3,7 @@
             [meinsweeper.square-names :refer :all]
             [meinsweeper.ai.grid :as grid]))
 
-(declare mine?)
+(declare mine? generate-fact-for)
 
 (lg/defrel numbered-square coordinates count)
 (lg/defrel mine-square coordinates _)
@@ -14,7 +14,13 @@
 (defn record-mine-square [coordinates]
   (lg/fact mine-square coordinates true))
 
-(defn generate-fact-for [square row-idx col-idx]
+(defn generate-facts-for [grid]
+  (doall (for [row-idx (range (grid/rows-count grid))
+               col-idx (range (grid/cols-count grid))]
+           (let [square (grid/square-at grid [row-idx col-idx])]
+             (generate-fact-for square row-idx col-idx)))))
+
+(defn- generate-fact-for [square row-idx col-idx]
   (cond (number? square)
         (lg/fact numbered-square [row-idx col-idx] square)
         (mine? square)
@@ -23,8 +29,3 @@
 (defn- mine? [square]
   (= mine square))
 
-(defn generate-facts-for [grid]
-  (doall (for [row-idx (range (grid/rows-count grid))
-               col-idx (range (grid/cols-count grid))]
-           (let [square (grid/square-at grid [row-idx col-idx])]
-             (generate-fact-for square row-idx col-idx)))))

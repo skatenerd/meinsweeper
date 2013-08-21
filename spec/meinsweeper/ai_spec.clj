@@ -4,7 +4,6 @@
             [meinsweeper.square-names :refer :all]
             [meinsweeper.ai.facts :refer :all]
             [meinsweeper.spec-helper :refer :all]
-            [meinsweeper.ai.constraint :refer :all]
             [meinsweeper.ai :refer :all]))
 (describe
   "integration"
@@ -26,7 +25,7 @@
                 [1 1] 1
                 [1 2] 1
                 [1 3] 0}
-               (facts-to-fixed-squares 2 4)))
+               (fixed-squares 2 4)))
 
   (describe
     "grid input -> fixed squares"
@@ -39,7 +38,7 @@
                   [1 1] 1
                   [1 2] 1
                   [1 3] 0}
-                 (grid-to-fixed-squares [[1       2       2       1]
+                 (fixed-squares-for-grid [[1       2       2       1]
                                          [unknown unknown unknown unknown]])
 
 
@@ -54,7 +53,7 @@
                   [1 1] 1
                   [1 2] 0
                   }
-                 (grid-to-fixed-squares [[unknown 1    unknown]
+                 (fixed-squares-for-grid [[unknown 1    unknown]
                                          [unknown mine unknown]]))))
 
   (it "grid input -> clicks you should make"

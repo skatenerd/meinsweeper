@@ -5,7 +5,7 @@
 
 (declare all-coordinates solve-constraints rule-following-solutions solution-summary lvars-for-all-coordinates bind-to-zero-or-one is-sum constraint-lvars)
 
-(defn fixed-coordinate-values [constraints]
+(defn for-constraints [constraints]
   (let [solution-summarys (solve-constraints constraints)
         fixed-coordinates (data-queries/indices-of-equality solution-summarys)]
     (select-keys (first solution-summarys) fixed-coordinates)))
