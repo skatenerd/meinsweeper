@@ -15,5 +15,5 @@
   (fixed-squares (rows-count grid) (cols-count grid)))
 
 (defn clicks-for [grid]
-  (clicks/for (fixed-squares-for-grid grid) grid))
+  (clicks/for-fixed-squares (fixed-squares-for-grid grid) grid))
 

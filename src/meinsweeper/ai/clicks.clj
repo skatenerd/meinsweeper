@@ -4,7 +4,7 @@
 
 (declare relevant-points click-representation)
 
-(defn for [fixed-squares grid]
+(defn for-fixed-squares [fixed-squares grid]
   (into {} (map click-representation (relevant-points fixed-squares grid))))
 
 (defn- relevant-points [fixed-squares grid]
