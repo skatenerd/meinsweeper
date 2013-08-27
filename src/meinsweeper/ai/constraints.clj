@@ -1,7 +1,7 @@
 (ns meinsweeper.ai.constraints
   (:require [clojure.core.logic :as lg]
             [meinsweeper.ai.facts :as facts]
-            [meinsweeper.ai.grid :as grid]))
+            [meinsweeper.grid :as grid]))
 
 (declare numbered-square-constraints mine-square-constraints)
 

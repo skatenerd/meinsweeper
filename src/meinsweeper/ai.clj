@@ -2,7 +2,7 @@
   (:require [meinsweeper.ai.facts :as facts]
             [meinsweeper.ai.constraints :as constraints]
             [meinsweeper.ai.constraint-resolution :as resolutions]
-            [meinsweeper.ai.grid :refer :all]
+            [meinsweeper.grid :refer :all]
             [meinsweeper.ai.clicks :as clicks]))
 
 

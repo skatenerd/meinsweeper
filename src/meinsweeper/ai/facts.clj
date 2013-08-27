@@ -1,7 +1,7 @@
 (ns meinsweeper.ai.facts
   (:require [clojure.core.logic :as lg]
             [meinsweeper.square-names :refer :all]
-            [meinsweeper.ai.grid :as grid]))
+            [meinsweeper.grid :as grid]))
 
 (declare mine? generate-fact-for)
 

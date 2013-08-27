@@ -1,6 +1,6 @@
 (ns meinsweeper.ai.clicks
   (:require [meinsweeper.square-names :refer :all]
-            [meinsweeper.ai.grid :as grid]))
+            [meinsweeper.grid :as grid]))
 
 (declare relevant-points click-representation)
 

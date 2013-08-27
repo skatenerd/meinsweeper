@@ -1,4 +1,4 @@
-(ns meinsweeper.ai.grid
+(ns meinsweeper.grid
   (:require [clojure.core.logic :as lg]
             [clojure.core.logic.fd :as fd]))
 
