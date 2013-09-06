@@ -22,24 +22,21 @@
     [row col]
     (flush-path-exists target [row col] grid)))
 
-(defn flush-path-exists [target candidate grid]
-  (lg/all
+(def flush-path-exists
+  (lg/tabled [target candidate grid]
     (on-grid candidate grid)
     (lg/fresh [row col]
+              (flush [row col] candidate)
               (on-grid [row col] grid)
-              (flush [row col] target)
-              ;(lg/== [row col] candidate)
+              (prn target)
               (lg/conde
-                [(lg/== [row col] candidate)]
-                [(flush-path-exists [row col] candidate grid)]
-
-                )
-
-              )
+                [(lg/all
+                   (fd/eq (= row 0))
+                   (fd/eq (= col 0)))]
+                [(flush-path-exists [row col] target grid)])))
 
 
-
-    ))
+  )
 
 (defn rows-count [grid]
   (count grid))
