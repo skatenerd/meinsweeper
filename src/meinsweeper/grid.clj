@@ -12,32 +12,6 @@
                 (on-grid [row col] rows-count cols-count)
                 (close [row col] target-square))))
 
-(defn flush-neighbors [rows-count cols-count target-square]
-  (set (lg/run* [row col]
-                (on-grid [row col] rows-count cols-count)
-                (flush [row col] target-square))))
-
-(defn flush-path-to [target grid]
-  (lg/run*
-    [row col]
-    (flush-path-exists target [row col] grid)))
-
-(def flush-path-exists
-  (lg/tabled [target candidate grid]
-    (on-grid candidate grid)
-    (lg/fresh [row col]
-              (flush [row col] candidate)
-              (on-grid [row col] grid)
-              (prn target)
-              (lg/conde
-                [(lg/all
-                   (fd/eq (= row 0))
-                   (fd/eq (= col 0)))]
-                [(flush-path-exists [row col] target grid)])))
-
-
-  )
-
 (defn rows-count [grid]
   (count grid))
 
