@@ -26,7 +26,7 @@
     (fd/in row (fd/interval 0 (dec rows-count)))
     (fd/in col (fd/interval 0 (dec cols-count))))))
 
-(defn- close [[row-1 col-1] [row-2 col-2]]
+(defn close [[row-1 col-1] [row-2 col-2]]
   (lg/all
     (fd/eq (>= 1 (- row-2 row-1)))
     (fd/eq (>= 1 (- row-1 row-2)))
