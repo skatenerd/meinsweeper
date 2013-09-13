@@ -57,12 +57,13 @@
                                          [unknown mine unknown]]))))
 
   (it "grid input -> clicks you should make"
-      (should= {[1 0] vacant
-                [1 1] mine
-                [1 2] mine
-                [1 3] vacant}
-               (clicks-for [[1       2       2       1]
-                            [unknown unknown unknown unknown]])))
+      (should=
+        {[1 0] vacant
+         [1 1] mine
+         [1 2] mine
+         [1 3] vacant}
+        (clicks-for [[1       2       2       1]
+                     [unknown unknown unknown unknown]])))
 
   )
 

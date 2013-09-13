@@ -18,7 +18,7 @@
 (defn cols-count [grid]
   (count (first grid)))
 
-(defn- on-grid
+(defn on-grid
   ([square grid]
    (on-grid square (rows-count grid) (cols-count grid)))
   ([[row col] rows-count cols-count]
