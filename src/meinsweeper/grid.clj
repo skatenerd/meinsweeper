@@ -2,7 +2,7 @@
   (:require [clojure.core.logic :as lg]
             [clojure.core.logic.fd :as fd]))
 
-(declare close on-grid flush flush-path-exists)
+(declare adjacent on-grid flush flush-path-exists)
 
 (defn square-at [grid [row-idx col-idx]]
   ((grid row-idx) col-idx) )
@@ -10,7 +10,7 @@
 (defn neighbors [rows-count cols-count target-square]
   (set (lg/run* [row col]
                 (on-grid [row col] rows-count cols-count)
-                (close [row col] target-square))))
+                (adjacent [row col] target-square))))
 
 (defn rows-count [grid]
   (count grid))
@@ -26,7 +26,7 @@
     (fd/in row (fd/interval 0 (dec rows-count)))
     (fd/in col (fd/interval 0 (dec cols-count))))))
 
-(defn close [[row-1 col-1] [row-2 col-2]]
+(defn adjacent [[row-1 col-1] [row-2 col-2]]
   (lg/all
     (fd/eq (>= 1 (- row-2 row-1)))
     (fd/eq (>= 1 (- row-1 row-2)))
@@ -35,7 +35,7 @@
 
 (defn- flush [[row-1 col-1] [row-2 col-2]]
   (lg/all
-    (close [row-1 col-1] [row-2 col-2])
+    (adjacent [row-1 col-1] [row-2 col-2])
     (lg/conde
       [(lg/== row-1 row-2)]
       [(lg/== col-1 col-2)])))

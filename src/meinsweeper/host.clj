@@ -14,25 +14,26 @@
 (lg/defrel underlying-mine coordinates _)
 
 (defn no-mine-neighbors [square]
-(let [mine-neighbors (lg/run* [r c]
-                       (on-grid square 10 10)
-                       (underlying-mine [r c] nil)
-                       (close [r c] square))]
-  (lg/emptyo mine-neighbors)))
+  (let [mine-neighbors (lg/run* [r c]
+                                (underlying-mine [r c] nil)
+                                (on-grid square 10 10)
+                                (adjacent [r c] square))]
+    (lg/emptyo mine-neighbors)))
 
 
 (def connected?
-  (lg/tabled [target candidate]
-     (lg/all
-       (underlying-vacancy candidate nil)
-       (no-mine-neighbors target)
-       (lg/conde
-         [(close target candidate)]
-         [(lg/fresh [intermediate-row intermediate-col]
-                    (underlying-vacancy [intermediate-row intermediate-col] nil)
-                    (close [intermediate-row intermediate-col] target)
-                    (connected? [intermediate-row intermediate-col] candidate))]))))
+  (lg/tabled
+    [target current-candidate]
+    (underlying-vacancy current-candidate nil)
+    (lg/conde
+      [(adjacent target current-candidate)]
+      [(lg/fresh
+         [intermediate-row intermediate-col]
+         (underlying-vacancy [intermediate-row intermediate-col] nil)
+         (adjacent [intermediate-row intermediate-col] current-candidate)
+         (no-mine-neighbors [intermediate-row intermediate-col])
+         (connected? target [intermediate-row intermediate-col]))])))
 
 (defn expand-for-click [click-location]
   (set (lg/run* [row col]
-           (connected? click-location [row col]))))
+                (connected? click-location [row col] ))))
