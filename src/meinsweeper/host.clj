@@ -1,35 +1,26 @@
 (ns meinsweeper.host
   (:require
-     [clojure.core.logic :as lg]
-;    [meinsweeper.ai.facts :as facts]
-;    [meinsweeper.ai.constraints :as constraints]
-;    [meinsweeper.ai.constraint-resolution :as resolutions]
-    [meinsweeper.grid :refer :all]
-;    [meinsweeper.ai.clicks :as clicks]
-;
-
-    ))
+    [clojure.core.logic :as lg]
+    [meinsweeper.grid :refer :all]))
 
 (lg/defrel underlying-vacancy coordinates _)
 (lg/defrel underlying-mine coordinates _)
 (lg/defrel neighborless-vacancy coordinates _)
 
-(defn mine-neighbors [square mine-neighbors]
-  )
-
-(defn got-neighbors []
+(defn neighbored-vacancies []
   (set (lg/run* [r c]
                 (lg/fresh [mine-row mine-col]
                   (adjacent [r c] [mine-row mine-col])
                   (underlying-vacancy [r c] nil)
                   (underlying-mine [mine-row mine-col] nil)))))
 
-(defn record-neighborless-vacancies []
-  (let [vacancies (set (lg/run* [square] (underlying-vacancy square nil)))
-        neighborless-vacancies (clojure.set/difference vacancies (got-neighbors))]
-   (doseq [square neighborless-vacancies]
-    (lg/fact neighborless-vacancy square nil))))
+(defn neighborless-vacancies []
+  (let [all-vacancies (set (lg/run* [square] (underlying-vacancy square nil)))]
+    (clojure.set/difference all-vacancies (neighbored-vacancies))))
 
+(defn record-neighborless-vacancies []
+  (doseq [square (neighborless-vacancies)]
+    (lg/fact neighborless-vacancy square nil)))
 
 (def connected?
   (lg/tabled
