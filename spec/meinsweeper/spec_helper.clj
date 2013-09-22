@@ -13,5 +13,6 @@
 (defn remove-all-facts []
   (remove-facts numbered-square 2)
   (remove-facts underlying-vacancy 2)
+  (remove-facts neighborless-vacancy 2)
   (remove-facts underlying-mine 2)
   (remove-facts mine-square 2))
