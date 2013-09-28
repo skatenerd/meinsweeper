@@ -2,12 +2,12 @@
   (:require [meinsweeper.square-names :refer :all]
             [meinsweeper.grid :as grid]))
 
-(declare relevant-points click-representation)
+(declare known-points click-representation)
 
 (defn for-fixed-squares [fixed-squares grid]
-  (into {} (map click-representation (relevant-points fixed-squares grid))))
+  (into {} (map click-representation (known-points fixed-squares grid))))
 
-(defn- relevant-points [fixed-squares grid]
+(defn- known-points [fixed-squares grid]
   (filter
     #(= unknown (grid/square-at grid (key %)))
     fixed-squares))

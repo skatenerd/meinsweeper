@@ -12,6 +12,11 @@
                 (on-grid [row col] rows-count cols-count)
                 (adjacent [row col] target-square))))
 
+(defn all-positions [rows cols]
+  (for [row (range rows)
+        col (range cols)]
+    [row col]))
+
 (defn rows-count [grid]
   (count grid))
 
