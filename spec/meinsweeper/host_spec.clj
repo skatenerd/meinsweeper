@@ -62,11 +62,11 @@
          ["*" "☐" "☐"]
          ["☐" "☐" " "]]
         (viewable-game #{[0 0] [1 0] [0 1] [2 2]} 2 2))
-      (print-viewable-game (viewable-game #{[0 0] [1 0] [0 1] [2 2]} 2 2))))
+      ))
 
 
 (describe
-  "integration"
+  "filling out squares after a click"
   (before
     (remove-all-facts))
 
@@ -100,4 +100,11 @@
       (lg/fact underlying-vacancy [1 3] nil)
 
       (should= #{[1 0] [0 0] [1 1] [0 1]} (expand-for-click [[0 0] vacant])))
+
+  (it "includes the square clicked on, even when it is a mine"
+
+      (lg/fact underlying-mine [0 0] nil)
+      (should= #{[0 0]} (expand-for-click [[0 0] "doesnt matter"]))
+
+      )
   )

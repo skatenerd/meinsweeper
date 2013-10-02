@@ -15,19 +15,11 @@
         shuffled (shuffle all-positions)]
     (set (take count shuffled))))
 
-(defn all-mines []
-  (set (lg/run* [s]
-                (underlying-mine s nil)
-                ))
-  )
-
 (defn mine? [square]
-  (contains? (all-mines) square)
-  ;(let [found-mine (lg/run* [mine-square]
-  ;                      (lg/== mine-square square)
-  ;                      (underlying-mine mine-square nil))]
-  ;  ;(prn "Square: " square " had " found-mine " at it")
-  ;  (not (empty? found-mine)))
+  (let [found-mine (lg/run* [mine-square]
+                        (lg/== mine-square square)
+                        (underlying-mine mine-square nil))]
+    (not (empty? found-mine)))
   )
 
 (defn build-game-facts [mines rows cols]
@@ -96,10 +88,10 @@
     (record-neighborless-vacancies)
     (if (= state mine)
       #{place}
-      (set (lg/run* [row col]
-                    (connected? place [row col]))))))
+      (conj (set (lg/run* [row col]
+                    (connected? place [row col]))) place))))
 
-(defn crap-for [square]
+(defn square-state [square]
   (if (mine? square)
     mine
     (neighbor-mine-count square)))
@@ -108,5 +100,5 @@
   (vec (for [row (range rows)]
     (vec (for [col (range cols)]
      (if (contains? visible-stuff [row col])
-      (crap-for [row col])
+      (square-state [row col])
       unknown))))))

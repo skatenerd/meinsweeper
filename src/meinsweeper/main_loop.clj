@@ -31,3 +31,6 @@
         (println "")
         (recur new-exposed-squares (inc iterations))
         ))))
+
+(defn -main []
+  (go 10 9 9))
