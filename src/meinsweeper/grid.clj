@@ -1,5 +1,6 @@
 (ns meinsweeper.grid
   (:require [clojure.core.logic :as lg]
+            [meinsweeper.square-names :refer :all]
             [clojure.core.logic.fd :as fd]))
 
 (declare adjacent on-grid flush flush-path-exists)
@@ -16,6 +17,11 @@
   (for [row (range rows)
         col (range cols)]
     [row col]))
+
+(defn empty-grid [rows cols]
+  (vec (for [row (range rows)]
+    (vec (for [col (range cols)]
+     unknown)))))
 
 (defn rows-count [grid]
   (count grid))

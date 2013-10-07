@@ -3,6 +3,7 @@
             [meinsweeper.ai.constraints :as constraints]
             [meinsweeper.ai.constraint-resolution :as resolutions]
             [meinsweeper.grid :refer :all]
+            [meinsweeper.square-names :refer :all]
             [meinsweeper.ai.clicks :as clicks]))
 
 
@@ -17,3 +18,8 @@
 (defn clicks-for [grid]
   (clicks/for-fixed-squares (fixed-squares-for-grid grid) grid))
 
+(defn grouped-clicks-for [grid]
+  (let [clicks (clicks-for grid)
+        grouped (group-by val clicks)]
+    {:vacancies (set (map first (vacant grouped)))
+     :mines (set (map first (mine grouped)))}))

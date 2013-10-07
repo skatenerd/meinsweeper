@@ -30,25 +30,6 @@
     (lg/fact underlying-mine mine-square nil))
   (doseq [vacant-square vacant-positions] (lg/fact underlying-vacancy vacant-square nil))))
 
-(defn print-viewable-game [game-structure]
-  (println (clojure.string/join "\n" (map #(clojure.string/join "|" %)  game-structure))))
-
-(defn symbol-for [square exposed-squares]
-  (if (contains? exposed-squares square)
-    (cond
-      (mine? square)
-      "*"
-      :else
-      (if (pos? (neighbor-mine-count square))
-        (str (neighbor-mine-count square))
-        " "))
-    "☐"))
-
-(defn viewable-game [exposed-squares max-row max-col]
-  (for [row (range (inc max-row))]
-    (for [col (range (inc max-col))]
-      (symbol-for [row col] exposed-squares))))
-
 (defn neighbor-mine-count [square]
   (count
     (lg/run* [r c]
@@ -84,21 +65,34 @@
          (connected? target [intermediate-row intermediate-col]))])))
 
 (defn expand-for-click [click-location]
-  (let [[place state] click-location]
-    (record-neighborless-vacancies)
-    (if (= state mine)
-      #{place}
-      (conj (set (lg/run* [row col]
-                    (connected? place [row col]))) place))))
+  (record-neighborless-vacancies)
+  (conj (set (lg/run* [row col]
+                      (connected? click-location [row col]))) click-location))
 
 (defn square-state [square]
   (if (mine? square)
     mine
     (neighbor-mine-count square)))
 
-(defn state-map [visible-stuff rows cols]
-  (vec (for [row (range rows)]
-    (vec (for [col (range cols)]
-     (if (contains? visible-stuff [row col])
-      (square-state [row col])
-      unknown))))))
+(defn mark-squares [grid to-put squares]
+  (reduce
+    (fn [updated-grid current-square]
+      (update-in updated-grid current-square (fn [_] (to-put current-square))))
+    grid
+    squares))
+
+(defn clear-vacancies [grid vacancies]
+  (reduce
+    (fn [updated-grid current-vacancy]
+      (let [for-vacancy (expand-for-click current-vacancy)]
+        (mark-squares updated-grid square-state for-vacancy)))
+    grid
+    vacancies))
+
+(defn mark-mines [grid squares]
+  (mark-squares grid (fn [_] mine) squares))
+
+(defn for-theory [theory rows cols]
+  (let [after-vacancies-cleared (clear-vacancies (empty-grid rows cols) (:vacancies theory))]
+    (mark-mines after-vacancies-cleared (:mines theory))
+    ))

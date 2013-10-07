@@ -1,17 +1,16 @@
 (ns meinsweeper.main-loop
   (:require
     [meinsweeper.host :refer :all]
+    [meinsweeper.host.visualization :refer :all]
     [meinsweeper.square-names :refer :all]
     [meinsweeper.ai :refer :all]))
 
-(defn aggressive-moves [exposed-squares rows cols]
-  (let [game-state (state-map exposed-squares rows cols)
-        moves (clicks-for game-state)]
-    (prn "cpu moves were:  " moves)
-    (if (empty? moves)
-      {[(rand-int rows) (rand-int cols)] vacant}
-      moves
-      )))
+(defn aggressive-moves [game-as-grid rows cols]
+  (let [moves (clicks-for game-as-grid)]
+    (if (every? empty? (vals moves))
+      {:vacancies #{[(rand-int rows) (rand-int cols)]}
+       :mines #{}}
+      moves)))
 
 (defn new-exposed-squares [moves-made exposed-squares]
   (reduce
@@ -22,15 +21,15 @@
 
 (defn go [mines rows cols]
   (build-game-facts mines rows cols)
-  (loop [exposed-squares #{}
+  (loop [cpu-theory {:mines #{} :vacancies #{}}
          iterations 0]
     (if (< iterations 10)
-      (let [moves-made (aggressive-moves exposed-squares rows cols)
-            new-exposed-squares (new-exposed-squares moves-made exposed-squares)]
-        (print-viewable-game (viewable-game new-exposed-squares rows cols))
+      (let [game-as-grid (for-theory cpu-theory rows cols)
+            moves-made (aggressive-moves game-as-grid rows cols)
+            new-cpu-theory (merge-with clojure.set/union cpu-theory moves-made)]
+        (print-viewable-game game-as-grid)
         (println "")
-        (recur new-exposed-squares (inc iterations))
-        ))))
+        (recur new-cpu-theory (inc iterations))))))
 
 (defn -main []
-  (go 10 9 9))
+  (go 10 10 10))

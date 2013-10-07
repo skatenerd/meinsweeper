@@ -2,14 +2,18 @@
   (:require [meinsweeper.square-names :refer :all]
             [meinsweeper.grid :as grid]))
 
-(declare known-points click-representation)
+(declare novel-points click-representation)
 
 (defn for-fixed-squares [fixed-squares grid]
-  (into {} (map click-representation (known-points fixed-squares grid))))
+  (let [grouped (group-by second (novel-points fixed-squares grid))]
+    {:vacancies (set (map first (get grouped 0)))
+     :mines (set (map first (get grouped 1)))} )
+  )
 
-(defn- known-points [fixed-squares grid]
+(defn- novel-points [fixed-squares grid]
   (filter
-    #(= unknown (grid/square-at grid (key %)))
+    (fn [square]
+      (= unknown (grid/square-at grid (key square))))
     fixed-squares))
 
 (defn- click-representation [fixed-square]

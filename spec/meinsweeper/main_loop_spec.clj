@@ -6,5 +6,5 @@
   "interaction between host and ai"
   (before
     (remove-all-facts))
-  (xit "plays 10 rounds"
-      (go 10 9 9)))
+  (it "plays 10 rounds"
+      (go 5 5 5)))

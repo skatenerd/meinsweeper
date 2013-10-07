@@ -2,12 +2,10 @@
 
 SOLVE MINESWEEPER
 
-## Usage
 
-FIXME
+`LEIN RUN` will PLAY A GAME
 
-## License
 
-Copyright © 2013 FIXME
+# TODO
 
-Distributed under the Eclipse Public License, the same as Clojure.
+Validate CPU moves so it blows up when it makes a bad guess
