@@ -23,3 +23,15 @@
         grouped (group-by val clicks)]
     {:vacancies (set (map first (vacant grouped)))
      :mines (set (map first (mine grouped)))}))
+
+(defn guess-move [grid]
+  (let [rows-count (count grid)
+        cols-count (count (first grid))]
+    {:vacancies #{[(rand-int rows-count) (rand-int cols-count)]}
+     :mines #{}}))
+
+(defn aggressive-moves [grid]
+  (let [moves (clicks-for grid)]
+    (if (every? empty? (vals moves))
+      (guess-move grid)
+      moves)))

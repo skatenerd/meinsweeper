@@ -81,7 +81,7 @@
 
       (should=
         #{[1 0] [0 0] [1 1] [0 1] [1 2] [0 2] [1 3] [0 3]}
-        (expand-for-click [0 0])))
+        (expand-for-click [0 0] [[unknown]])))
 
   (it "doesnt go past nub (two consecutive spaces on connecting path cannot be adjacent to mines)"
       (lg/fact underlying-mine [1 2] nil)
@@ -93,12 +93,12 @@
       (lg/fact underlying-vacancy [0 3] nil)
       (lg/fact underlying-vacancy [1 3] nil)
 
-      (should= #{[1 0] [0 0] [1 1] [0 1]} (expand-for-click [0 0])))
+      (should= #{[1 0] [0 0] [1 1] [0 1]} (expand-for-click [0 0] [[unknown]])))
 
   (it "includes the square clicked on, even when it is a mine"
 
       (lg/fact underlying-mine [0 0] nil)
-      (should= #{[0 0]} (expand-for-click [0 0]))
+      (should= #{[0 0]} (expand-for-click [0 0] [[unknown]]))
 
       )
   )

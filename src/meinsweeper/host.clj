@@ -64,10 +64,18 @@
          (neighborless-vacancy [intermediate-row intermediate-col] nil)
          (connected? target [intermediate-row intermediate-col]))])))
 
-(defn expand-for-click [click-location]
+
+(defn expand-for-click [click-location grid]
+  (println "expanding for  " click-location)
   (record-neighborless-vacancies)
-  (conj (set (lg/run* [row col]
-                      (connected? click-location [row col]))) click-location))
+  (if (= unknown (square-at grid click-location))
+    (conj
+      (set (lg/run* [row col]
+                    (connected? click-location [row col])))
+      click-location)
+    #{click-location}))
+
+(def memoized-expand-for-click (memoize expand-for-click))
 
 (defn square-state [square]
   (if (mine? square)
@@ -84,7 +92,7 @@
 (defn clear-vacancies [grid vacancies]
   (reduce
     (fn [updated-grid current-vacancy]
-      (let [for-vacancy (expand-for-click current-vacancy)]
+      (let [for-vacancy (expand-for-click current-vacancy updated-grid)]
         (mark-squares updated-grid square-state for-vacancy)))
     grid
     vacancies))
