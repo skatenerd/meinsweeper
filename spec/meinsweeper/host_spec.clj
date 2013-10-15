@@ -56,7 +56,20 @@
            :vacancies [[1 1]]
            :mines [[1 0]]}
           2 4
-          ))))
+          )))
+
+  (it "explodes when cpu clicks on a mine"
+      (lg/fact underlying-mine [0 0] nil)
+      (should=
+        [[kaboom]]
+        (for-theory
+          {:vacancies #{[0 0]}
+           :mines #{}}
+          1 1
+          )))
+
+
+  )
 
 
 (describe

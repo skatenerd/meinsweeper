@@ -5,7 +5,6 @@
     [meinsweeper.square-names :refer :all]
     [meinsweeper.ai :refer :all]))
 
-
 (defn next-frame [current-frame rows cols]
   (let [grid (:grid current-frame)
         theory (:theory current-frame)
@@ -22,8 +21,8 @@
     (iterate #(next-frame % rows cols) initial-frame)))
 
 (defn go [mines rows cols iterations]
-  (doseq [shitass (take iterations (game-sequence mines rows cols))]
-    (print-viewable-game (:grid shitass))
+  (doseq [frame (take iterations (game-sequence mines rows cols))]
+    (print-viewable-game (:grid frame))
     (println)))
 
 (defn -main []

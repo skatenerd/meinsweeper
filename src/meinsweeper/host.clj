@@ -65,20 +65,31 @@
          (connected? target [intermediate-row intermediate-col]))])))
 
 
+(defn- connected-squares [square]
+  (let [connected-squares (set (lg/run* [row col]
+                                        (connected? square [row col])))]
+   (conj
+    connected-squares
+    square)))
+
+(defn individual-vacant-click [grid click-location]
+  (case (square-at grid click-location)
+    vacant #{click-location}
+    mine #{kaboom}
+    )
+  )
+
 (defn expand-for-click [click-location grid]
   (record-neighborless-vacancies)
   (if (= unknown (square-at grid click-location))
-    (conj
-      (set (lg/run* [row col]
-                    (connected? click-location [row col])))
-      click-location)
+    (connected-squares click-location)
     #{click-location}))
 
 (def memoized-expand-for-click (memoize expand-for-click))
 
 (defn square-state [square]
   (if (mine? square)
-    mine
+    kaboom
     (neighbor-mine-count square)))
 
 (defn mark-squares [grid to-put squares]
