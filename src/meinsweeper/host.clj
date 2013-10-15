@@ -66,7 +66,6 @@
 
 
 (defn expand-for-click [click-location grid]
-  (println "expanding for  " click-location)
   (record-neighborless-vacancies)
   (if (= unknown (square-at grid click-location))
     (conj

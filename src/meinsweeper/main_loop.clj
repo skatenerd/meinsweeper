@@ -6,17 +6,25 @@
     [meinsweeper.ai :refer :all]))
 
 
-(defn go [mines rows cols iterations]
+(defn next-frame [current-frame rows cols]
+  (let [grid (:grid current-frame)
+        theory (:theory current-frame)
+        moves-made (aggressive-moves grid)
+        new-cpu-theory (merge-with clojure.set/union theory moves-made)
+        new-grid (for-theory new-cpu-theory rows cols)]
+    {:theory new-cpu-theory :grid new-grid}))
+
+(defn game-sequence [mines rows cols]
   (build-game-facts mines rows cols)
-  (loop [cpu-theory {:mines #{} :vacancies #{}}
-         iteration 0]
-    (if (< iteration iterations)
-      (let [game-as-grid (for-theory cpu-theory rows cols)
-            moves-made (aggressive-moves game-as-grid)
-            new-cpu-theory (merge-with clojure.set/union cpu-theory moves-made)]
-        (print-viewable-game game-as-grid)
-        (println "")
-        (recur new-cpu-theory (inc iteration))))))
+  (let [initial-theory {:mines #{} :vacancies #{}}
+        initial-grid (for-theory initial-theory rows cols)
+        initial-frame {:theory initial-theory :grid initial-grid}]
+    (iterate #(next-frame % rows cols) initial-frame)))
+
+(defn go [mines rows cols iterations]
+  (doseq [shitass (take iterations (game-sequence mines rows cols))]
+    (print-viewable-game (:grid shitass))
+    (println)))
 
 (defn -main []
   (go 10 10 10 10))

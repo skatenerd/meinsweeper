@@ -32,6 +32,7 @@
 
 (defn aggressive-moves [grid]
   (let [moves (clicks-for grid)]
+    ;(prn "grid -> moves" grid moves)
     (if (every? empty? (vals moves))
       (guess-move grid)
       moves)))
