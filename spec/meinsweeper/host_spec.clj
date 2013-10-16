@@ -71,6 +71,23 @@
 
   )
 
+(describe
+  "is the game over?"
+  (before
+    (remove-all-facts))
+
+  (it "is not over for an un-filled-out board"
+      (should-not (over? [[unknown]])))
+  (it "is over for correctly filled-out board"
+      (lg/fact underlying-mine [0 0] nil)
+      (lg/fact underlying-vacancy [0 1] nil)
+      (should (over? [[mine vacant]])))
+  (it "is not over for an incorrectly filled out board"
+      (lg/fact underlying-mine [0 0] nil)
+      (lg/fact underlying-vacancy [0 1] nil)
+      (should-not (over? [[mine mine]]))
+      )
+  )
 
 (describe
   "filling out squares after a click"

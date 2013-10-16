@@ -102,7 +102,7 @@
 (defn clear-vacancies [grid vacancies]
   (reduce
     (fn [updated-grid current-vacancy]
-      (let [for-vacancy (expand-for-click current-vacancy updated-grid)]
+      (let [for-vacancy (memoized-expand-for-click current-vacancy updated-grid)]
         (mark-squares updated-grid square-state for-vacancy)))
     grid
     vacancies))
@@ -114,3 +114,21 @@
   (let [after-vacancies-cleared (clear-vacancies (empty-grid rows cols) (:vacancies theory))]
     (mark-mines after-vacancies-cleared (:mines theory))
     ))
+
+(defn correctly-filled [position board]
+  (let [filled-value (square-at board position)]
+    (case filled-value
+      :unknown false
+      :mine (mine? position)
+      (not (mine? position)))))
+
+(defn incorrecly-vacanted [position board]
+  (= kaboom (square-at board position)))
+
+(defn busted? [board]
+  (some #(incorrecly-vacanted % board) (all-positions board)))
+
+(defn over? [board]
+  (or
+    (every? #(correctly-filled % board) (all-positions board))
+    (busted? board)))

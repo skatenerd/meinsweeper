@@ -13,11 +13,6 @@
                 (on-grid [row col] rows-count cols-count)
                 (adjacent [row col] target-square))))
 
-(defn all-positions [rows cols]
-  (for [row (range rows)
-        col (range cols)]
-    [row col]))
-
 (defn empty-grid [rows cols]
   (vec (for [row (range rows)]
     (vec (for [col (range cols)]
@@ -28,6 +23,16 @@
 
 (defn cols-count [grid]
   (count (first grid)))
+
+(defn all-positions
+  ([grid]
+   (all-positions (rows-count grid) (cols-count grid)))
+  ([rows cols]
+  (for [row (range rows)
+        col (range cols)]
+    [row col])))
+
+
 
 (defn on-grid
   ([square grid]

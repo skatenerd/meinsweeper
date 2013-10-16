@@ -5,6 +5,11 @@
     [meinsweeper.square-names :refer :all]
     [meinsweeper.ai :refer :all]))
 
+
+(defn take-while-and-n-more [pred n coll]
+    (let [[head tail] (split-with pred coll)]
+         (concat head (take n tail))))
+
 (defn next-frame [current-frame rows cols]
   (let [grid (:grid current-frame)
         theory (:theory current-frame)
@@ -18,12 +23,12 @@
   (let [initial-theory {:mines #{} :vacancies #{}}
         initial-grid (for-theory initial-theory rows cols)
         initial-frame {:theory initial-theory :grid initial-grid}]
-    (iterate #(next-frame % rows cols) initial-frame)))
+    (take-while-and-n-more #(not (over? (:grid %))) 1 (iterate #(next-frame % rows cols) initial-frame))))
 
-(defn go [mines rows cols iterations]
-  (doseq [frame (take iterations (game-sequence mines rows cols))]
+(defn go [mines rows cols]
+  (doseq [frame (game-sequence mines rows cols)]
     (print-viewable-game (:grid frame))
     (println)))
 
 (defn -main []
-  (go 10 10 10 10))
+  (go 10 10 10))

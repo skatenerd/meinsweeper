@@ -8,6 +8,7 @@
   (cond
     (= square-contents mine)  "*"
     (= square-contents unknown) "☐"
+    (= square-contents kaboom) "X"
     (number? square-contents) (if (pos? square-contents)
                                 (str square-contents)
                                 " ")))
