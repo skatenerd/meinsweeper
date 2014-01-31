@@ -3,7 +3,7 @@
 SOLVE MINESWEEPER
 
 
-`LEIN RUN` will PLAY A GAME
+`lein run` will PLAY A GAME
 
 
 # TODO
