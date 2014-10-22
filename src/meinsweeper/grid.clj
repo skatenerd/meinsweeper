@@ -1,7 +1,8 @@
 (ns meinsweeper.grid
   (:require [clojure.core.logic :as lg]
             [meinsweeper.square-names :refer :all]
-            [clojure.core.logic.fd :as fd]))
+            [clojure.core.logic.fd :as fd])
+  (:refer-clojure :exclude [flush]))
 
 (declare adjacent on-grid flush flush-path-exists)
 
